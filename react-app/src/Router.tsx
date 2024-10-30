@@ -9,6 +9,7 @@ import { EstadisticasPage } from "./screens/estadisticas/Estadisticas";
 import Dashboard from "./screens/dashboard/Dashboard";
 import UserForm from "./components/UserForm";
 import CandidateAndPartyForm from "./components/CandidateAndPartyForm";
+import EleccionesForm from "./components/EleccionesForm"; // Importa EleccionesForm
 
 export const AppRouter: React.FC<{}> = () => {
   return (
@@ -20,7 +21,8 @@ export const AppRouter: React.FC<{}> = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="usuarios" element={<UserForm />} />
-          <Route path="candidatos" element={<CandidateAndPartyForm />} /> {/* Formulario combinado */}
+          <Route path="candidatos" element={<CandidateAndPartyForm />} />
+          <Route path="elecciones" element={<EleccionesForm />} /> {/* Nueva ruta para EleccionesForm */}
         </Route>
       </Route>
     </Routes>
