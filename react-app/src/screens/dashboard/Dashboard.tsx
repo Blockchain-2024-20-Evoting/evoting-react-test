@@ -8,7 +8,7 @@ const Dashboard: React.FC = () => {
   return (
     <Box display="flex">
       <Sidebar />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         {/* Área donde se cargan los componentes según la ruta interna */}
         <Outlet />
       </Container>
