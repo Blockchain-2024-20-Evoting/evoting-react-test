@@ -1,19 +1,15 @@
+import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-
-import React from "react";
-
 import {
   AppBar,
   Box,
   Button,
   Container,
-  Grid,
-  Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -25,8 +21,6 @@ const pages = [
   { label: "Elecciones", href: "/elecciones" },
 ];
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
 function toCamelCase(str: string) {
   return str
     .toLowerCase()
@@ -37,12 +31,9 @@ function toCamelCase(str: string) {
 }
 
 export const NavBar: React.FC<{}> = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const isLoggedIn = false; // Cambiar esta variable según el estado de sesión
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -79,11 +70,11 @@ export const NavBar: React.FC<{}> = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              textDecoration: "none", // quita el subrayado del enlace
+              textDecoration: "none",
               "& .logo": {
-                width: "90px", // ajusta el tamaño de la imagen
+                width: "90px",
                 height: "60px",
-                marginRight: "8px", // espacio entre el logo y el texto
+                marginRight: "8px",
               },
             }}
           >
@@ -91,7 +82,7 @@ export const NavBar: React.FC<{}> = () => {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton>
+            <IconButton onClick={handleOpenNavMenu}>
               <MenuIcon />
             </IconButton>
             <Menu
@@ -137,8 +128,8 @@ export const NavBar: React.FC<{}> = () => {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -157,13 +148,26 @@ export const NavBar: React.FC<{}> = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
+              {!isLoggedIn ? (
+                <MenuItem onClick={handleCloseUserMenu} component="a" href="/login">
+                  <Typography textAlign="center">Login</Typography>
                 </MenuItem>
-              ))}
+              ) : (
+                <>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Profile</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Account</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Dashboard</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>
+                </>
+              )}
             </Menu>
           </Box>
         </Toolbar>
