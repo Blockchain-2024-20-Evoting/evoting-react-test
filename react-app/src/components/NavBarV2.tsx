@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+
 import React from "react";
 
 import {
@@ -59,7 +59,15 @@ export const NavBarV2: React.FC<{}> = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        background: "#FFFFFF",
+        borderBottomLeftRadius: "30px",
+        borderBottomRightRadius: "30px",
+        overflow: "hidden",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -120,7 +128,7 @@ export const NavBarV2: React.FC<{}> = () => {
                 key={page.label}
                 onClick={handleCloseNavMenu}
                 href={page.href}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "#000000", display: "block" }}
               >
                 {toCamelCase(page.label)}
               </Button>
