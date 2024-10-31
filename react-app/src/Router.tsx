@@ -20,9 +20,9 @@ export const AppRouter: React.FC<{}> = () => {
         <Route path="/estadisticas" element={<EstadisticasPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="usuarios" element={<UserForm />} />
-          <Route path="candidatos" element={<CandidateAndPartyForm />} />
-          <Route path="elecciones" element={<EleccionesForm />} />{" "}
+          <Route path="/usuarios" element={<UserForm />} />
+          <Route path="/candidatos" element={<CandidateAndPartyForm />} />
+          <Route path="/elecciones" element={<EleccionesForm />} />{" "}
           {/* Nueva ruta para EleccionesForm */}
         </Route>
       </Route>
