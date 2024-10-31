@@ -6,7 +6,7 @@ import LoginPage from "./screens/loginpage/LoginPage";
 import { RouterLayout } from "./components/RouterLayout";
 import { VotacionesPage } from "./screens/usuario/votaciones/Votaciones";
 import { EstadisticasPage } from "./screens/usuario/estadisticas/Estadisticas";
-import { EleccionesPage } from "./screens/usuario/elecciones/elecciones";
+import { EleccionesPage } from "./screens/usuario/elecciones/Elecciones";
 import Dashboard from "./screens/dashboard/Dashboard";
 import UsuariosForm from "./components/UserForm";
 import CandidatosForm from "./components/CandidateAndPartyForm";
