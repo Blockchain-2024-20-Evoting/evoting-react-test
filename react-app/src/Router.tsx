@@ -22,7 +22,7 @@ export const AppRouter: React.FC<{}> = () => {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="usuarios" element={<UserForm />} />
           <Route path="candidatos" element={<CandidateAndPartyForm />} />
-          <Route path="elecciones" element={<EleccionesForm />} /> {/* Nueva ruta para EleccionesForm */}
+          <Route path="elecciones" element={<EleccionesForm />} />
         </Route>
       </Route>
     </Routes>
