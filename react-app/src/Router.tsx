@@ -1,19 +1,22 @@
 // src/Router.tsx
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { HomePage } from "./screens/home/Home";
-import { LoginPage } from "./screens/login/Login";
+import LoginPage from "./screens/loginpage/LoginPage";
 import { RouterLayout } from "./components/RouterLayout";
 import { VotacionesPage } from "./screens/usuario/votaciones/Votaciones";
-
-import Dashboard from "./screens/dashboard/Dashboard";
-import UserForm from "./components/UserForm";
-import CandidateAndPartyForm from "./components/CandidateAndPartyForm";
-import EleccionesForm from "./components/EleccionesForm"; // Importa EleccionesForm
 import { EstadisticasPage } from "./screens/usuario/estadisticas/Estadisticas";
 import { EleccionesPage } from "./screens/usuario/elecciones/elecciones";
+import Dashboard from "./screens/dashboard/Dashboard";
+import UsuariosForm from "./components/UserForm";
+import CandidatosForm from "./components/CandidateAndPartyForm";
+import EleccionesForm  from "./components/EleccionesForm";
+import { useAuth } from "./contexts/AuthContext";
 
-export const AppRouter: React.FC<{}> = () => {
+
+export const AppRouter: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <Routes>
       <Route path="/" element={<RouterLayout />}>
@@ -22,9 +25,20 @@ export const AppRouter: React.FC<{}> = () => {
         <Route path="/estadisticas" element={<EstadisticasPage />} />
         <Route path="/elecciones" element={<EleccionesPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="usuarios" element={<UserForm />} />
-          <Route path="candidatos" element={<CandidateAndPartyForm />} />
+
+        {/* Rutas protegidas */}
+        <Route
+          path="/dashboard/*"
+          element={
+            isAuthenticated ? (
+              <Dashboard />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        >
+          <Route path="usuarios" element={<UsuariosForm />} />
+          <Route path="candidatos" element={<CandidatosForm />} />
           <Route path="elecciones" element={<EleccionesForm />} />
         </Route>
       </Route>

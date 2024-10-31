@@ -1,14 +1,16 @@
-import "bootstrap/dist/css/bootstrap.css";
-
+// src/App.tsx
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
-
 import { AppRouter } from "./Router";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppRouter />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
