@@ -6,12 +6,10 @@ const EleccionesForm: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#FFFFFF",
+        background: 'linear-gradient(to bottom, #290E55, #7E4DCF)',
         borderRadius: "20px",
         padding: 5,
         boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
-        maxWidth: "600px",
-        margin: "auto",
         display: "flex",
         flexDirection: "column",
         gap: 3,

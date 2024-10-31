@@ -24,8 +24,6 @@ const CandidateAndPartyForm: React.FC = () => {
         borderRadius: 2,
         boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
         width: 'calc(100% - 20px)', // Ancho total menos 20px de margen
-        maxWidth: '800px',
-        margin: '0 auto',
         transition: 'opacity 0.5s ease, transform 0.5s ease',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(20px)',
