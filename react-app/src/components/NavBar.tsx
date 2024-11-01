@@ -149,7 +149,11 @@ export const NavBar: React.FC<{}> = () => {
               onClose={handleCloseUserMenu}
             >
               {!isLoggedIn ? (
-                <MenuItem onClick={handleCloseUserMenu} component="a" href="/login">
+                <MenuItem
+                  onClick={handleCloseUserMenu}
+                  component="a"
+                  href="/login"
+                >
                   <Typography textAlign="center">Login</Typography>
                 </MenuItem>
               ) : (
