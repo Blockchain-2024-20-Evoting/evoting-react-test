@@ -21,7 +21,7 @@ const CandidateAndPartyForm: React.FC = () => {
       sx={{
         background: 'linear-gradient(to bottom, #290E55, #7E4DCF)', // Degradado de fondo
         padding: 4,
-        borderRadius: 2,
+        borderRadius: 10,
         boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
         width: 'calc(100% - 20px)', // Ancho total menos 20px de margen
         transition: 'opacity 0.5s ease, transform 0.5s ease',
