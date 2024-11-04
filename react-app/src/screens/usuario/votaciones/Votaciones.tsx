@@ -39,12 +39,19 @@ export const VotacionesPage: React.FC<{}> = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: "#EAEAEA", minHeight: "100vh", py: 5 }}>
+    <Box
+      sx={{
+        backgroundColor: "#EAEAEA",
+        minHeight: "100vh",
+        minWidth: "100vw",
+        py: 5,
+      }}
+    >
       <Typography
         variant="h4"
         component="h1"
         align="left"
-        sx={{ fontWeight: "bold", mb: 1, ml: 5, maxWidth: "xl" }}
+        sx={{ fontWeight: "bold", mb: 1, ml: 8, maxWidth: "xl" }}
       >
         Elecciones
       </Typography>
@@ -52,7 +59,7 @@ export const VotacionesPage: React.FC<{}> = () => {
         variant="h6"
         component="h2"
         align="left"
-        sx={{ color: "#757575", mb: 2, ml: 5 }}
+        sx={{ color: "#757575", mb: 2, ml: 8 }}
       >
         Elección Presidente Facultad Derecho
       </Typography>
@@ -61,9 +68,9 @@ export const VotacionesPage: React.FC<{}> = () => {
         sx={{
           mt: 5,
           backgroundColor: "#47184D",
-          py: 3,
-          paddingLeft: 5,
-          borderRadius: 2,
+          pt: 3,
+          pb: 3,
+          borderRadius: 5,
           maxWidth: "xl",
         }}
       >
@@ -75,6 +82,7 @@ export const VotacionesPage: React.FC<{}> = () => {
               boxShadow: 3,
               py: 0,
               backgroundColor: "#EAEAEA",
+              borderRadius: 2,
             }}
           >
             <Container
