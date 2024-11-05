@@ -15,25 +15,19 @@ import {
 } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext"; // Importar el contexto de autenticación
 
-const pages = [
-  { label: "Votaciones", href: "/votaciones" },
-  { label: "Estadisticas", href: "/estadisticas" },
-  { label: "Elecciones", href: "/elecciones" },
-];
-
-function toCamelCase(str: string) {
-  return str
-    .toLowerCase()
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-      index === 0 ? word.toLowerCase() : word.toUpperCase()
-    )
-    .replace(/\s+/g, "");
-}
+const pages = {
+  STUDENT: [
+    { label: "Votaciones", href: "/votaciones" },
+    { label: "Estadisticas", href: "/estadisticas" },
+    { label: "Elecciones", href: "/elecciones" },
+  ],
+  ADMIN: [{ label: "Dashboard", href: "/dashboard" }],
+};
 
 export const NavBar: React.FC<{}> = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { isAuthenticated, logout } = useAuth(); // Obtener el estado de autenticación y logout
+  const { isAuthenticated, logout, role } = useAuth(); // Obtener el estado de autenticación y rol
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -72,7 +66,7 @@ export const NavBar: React.FC<{}> = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/home"
             sx={{
               display: "flex",
               alignItems: "center",
@@ -113,7 +107,7 @@ export const NavBar: React.FC<{}> = () => {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
             >
-              {pages.map((page) => (
+              {(role ? pages[role] : []).map((page) => (
                 <MenuItem key={page.label} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center" component="a" href={page.href}>
                     {page.label}
@@ -142,7 +136,7 @@ export const NavBar: React.FC<{}> = () => {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {(role ? pages[role] : []).map((page) => (
               <Button
                 key={page.label}
                 onClick={handleCloseNavMenu}
