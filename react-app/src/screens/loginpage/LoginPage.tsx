@@ -1,26 +1,52 @@
-// src/screens/loginpage/LoginPage.tsx
 import React, { useState } from "react";
 import { Button, TextField, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
 
 const LoginPage: React.FC = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    if (login(username, password)) {
-      navigate("/dashboard");
-    } else {
-      setError("Credenciales incorrectas");
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:8080/auth/login", {
+        email,
+        password,
+      });
+
+      console.log(response.data);
+
+      // Manejar la respuesta del servidor
+      if (response.data.token) {
+        // Guardar el token, si es necesario
+        navigate(response.data.role === "STUDENT" ? "/" : "/dashboard");
+      } else {
+        setError("Email o contraseña incorrecta");
+      }
+    } catch (err: any) {
+      if (err.response) {
+        const message =
+          err.response.data.message ||
+          "Ha ocurrido un error en el inicio de sesión.";
+        setError(message);
+      } else {
+        setError("Ha ocurrido un error de red.");
+      }
+      console.error(err);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleLogin(e as unknown as React.FormEvent);
     }
   };
 
   return (
-    <Box style={{ display: 'flex', height: '100vh', width: '100vw' }}>
+    <Box style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <Box
         style={{
           width: "50%",
@@ -47,12 +73,13 @@ const LoginPage: React.FC = () => {
           Iniciar sesión
         </Typography>
         <TextField
-          label="email"
+          label="Email"
           variant="outlined"
           fullWidth
           margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onKeyPress={handleKeyPress} // Agregar el manejador de la tecla
         />
         <TextField
           label="Contraseña"
@@ -62,6 +89,7 @@ const LoginPage: React.FC = () => {
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyPress={handleKeyPress} // Agregar el manejador de la tecla
         />
         {error && <Typography color="error">{error}</Typography>}
         <Button
