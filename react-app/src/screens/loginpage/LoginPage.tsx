@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
           Iniciar sesión
         </Typography>
         <TextField
-          label="Usuario"
+          label="email"
           variant="outlined"
           fullWidth
           margin="normal"
