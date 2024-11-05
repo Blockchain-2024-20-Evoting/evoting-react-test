@@ -23,8 +23,15 @@ const LoginPage: React.FC = () => {
 
       // Manejar la respuesta del servidor
       if (response.data.token) {
-        login(email, password); // Llama al login del contexto
-        navigate(response.data.role === "STUDENT" ? "/" : "/dashboard");
+        // Llama al login del contexto con el rol recibido
+        await login(email, password, response.data.role); // Aquí pasamos el rol al contexto
+
+        // Redirigir según el rol del usuario
+        if (response.data.role === "ADMIN") {
+          navigate("/dashboard");
+        } else if (response.data.role === "STUDENT") {
+          navigate("/home");
+        }
       } else {
         setError("Email o contraseña incorrecta");
       }
