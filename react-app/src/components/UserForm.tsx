@@ -1,14 +1,48 @@
 // src/components/NewUserForm.tsx
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
+import axios from 'axios';
 
 const NewUserForm: React.FC = () => {
   const [visible, setVisible] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     // Hacer que el formulario sea visible después de que se monte el componente
     setVisible(true);
   }, []);
+
+  // Función para manejar el envío del formulario
+  const handleSubmit = async () => {
+    try {
+      const newUser = {
+        firstName,
+        lastName,
+        email,
+        password
+      };
+
+      // Hacer la solicitud POST al backend
+      const response = await axios.post('http://localhost:8080/auth/register/student', newUser); // Cambiado a la ruta correcta
+
+      if (response.status === 201) {
+        // Limpiar campos y mensaje de éxito
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPassword('');
+        setErrorMessage(null);
+        alert("Usuario creado exitosamente");
+      }
+    } catch (error) {
+      // Manejo de errores de la solicitud
+      setErrorMessage("Error al crear el usuario. Por favor revisa los datos ingresados.");
+    }
+  };
 
   return (
     <Box
@@ -34,11 +68,18 @@ const NewUserForm: React.FC = () => {
         <Typography variant="h5" gutterBottom sx={{ color: '#47184D' }}>
           Usuario Nuevo
         </Typography>
+        {errorMessage && (
+          <Typography color="error" variant="body2" gutterBottom>
+            {errorMessage}
+          </Typography>
+        )}
         <TextField
           label="Nombre/s"
           fullWidth
           margin="normal"
-          variant="outlined" // Cambia el estilo del TextField a outlined
+          variant="outlined"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
           sx={{
             borderColor: 'rgba(0, 0, 0, 0.1)', // Borde sutil
           }}
@@ -48,6 +89,8 @@ const NewUserForm: React.FC = () => {
           fullWidth
           margin="normal"
           variant="outlined"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           sx={{
             borderColor: 'rgba(0, 0, 0, 0.1)',
           }}
@@ -57,6 +100,8 @@ const NewUserForm: React.FC = () => {
           fullWidth
           margin="normal"
           variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{
             borderColor: 'rgba(0, 0, 0, 0.1)',
           }}
@@ -67,6 +112,8 @@ const NewUserForm: React.FC = () => {
           fullWidth
           margin="normal"
           variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           sx={{
             borderColor: 'rgba(0, 0, 0, 0.1)',
           }}
@@ -80,6 +127,7 @@ const NewUserForm: React.FC = () => {
               textTransform: 'lowercase', // Texto en minúsculas
               color: '#000000', // Texto en negro
             }}
+            onClick={handleSubmit}
           >
             guardar
           </Button>
