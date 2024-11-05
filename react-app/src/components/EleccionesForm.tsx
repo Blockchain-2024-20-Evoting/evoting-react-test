@@ -1,6 +1,6 @@
 // src/components/EleccionesForm.tsx
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, TextField, Button } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import { Box, Typography, TextField, Button } from "@mui/material";
 
 const EleccionesForm: React.FC = () => {
   const [visible, setVisible] = useState(false);
@@ -20,7 +20,7 @@ const EleccionesForm: React.FC = () => {
         flexDirection: "column",
         gap: 3,
         textAlign: "center",
-        transition: 'opacity 0.5s ease, transform 0.5s ease',
+        transition: "opacity 0.5s ease, transform 0.5s ease",
         opacity: visible ? 1 : 0,
       }}
     >
@@ -34,14 +34,22 @@ const EleccionesForm: React.FC = () => {
           border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
-        <Typography variant="h4">Nuevas elecciones</Typography>
-        <TextField label="Nombre elecciones" variant="outlined" fullWidth />
+        <Typography variant="h4" sx={{ mb: 4 }}>
+          Nuevas elecciones
+        </Typography>
+        <TextField
+          label="Nombre elecciones"
+          variant="outlined"
+          fullWidth
+          sx={{ mb: 4 }}
+        />
         <TextField
           label="Fecha inicio"
           type="date"
           variant="outlined"
           fullWidth
           InputLabelProps={{ shrink: true }}
+          sx={{ mb: 4 }}
         />
         <TextField
           label="Fecha fin"
@@ -49,6 +57,7 @@ const EleccionesForm: React.FC = () => {
           variant="outlined"
           fullWidth
           InputLabelProps={{ shrink: true }}
+          sx={{ mb: 4 }}
         />
         <Button
           variant="contained"
