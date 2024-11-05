@@ -1,4 +1,3 @@
-// src/Router.tsx
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { HomePage } from "./screens/home/Home";
@@ -10,13 +9,12 @@ import { EleccionesPage } from "./screens/usuario/elecciones/Elecciones";
 import Dashboard from "./screens/dashboard/Dashboard";
 import UsuariosForm from "./components/UserForm";
 import CandidatosForm from "./components/CandidateAndPartyForm";
-import EleccionesForm  from "./components/EleccionesForm";
+import EleccionesForm from "./components/EleccionesForm";
 import { useAuth } from "./contexts/AuthContext";
 
-
 export const AppRouter: React.FC = () => {
-  const { isAuthenticated } = useAuth();
-  
+  const { isAuthenticated, logout } = useAuth();
+
   return (
     <Routes>
       <Route path="/" element={<RouterLayout />}>
@@ -30,11 +28,7 @@ export const AppRouter: React.FC = () => {
         <Route
           path="/dashboard/*"
           element={
-            isAuthenticated ? (
-              <Dashboard />
-            ) : (
-              <Navigate to="/login" replace />
-            )
+            isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />
           }
         >
           <Route path="usuarios" element={<UsuariosForm />} />

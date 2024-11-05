@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Button, TextField, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LoginPage: React.FC = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +23,7 @@ const LoginPage: React.FC = () => {
 
       // Manejar la respuesta del servidor
       if (response.data.token) {
-        // Guardar el token, si es necesario
+        login(email, password); // Llama al login del contexto
         navigate(response.data.role === "STUDENT" ? "/" : "/dashboard");
       } else {
         setError("Email o contraseña incorrecta");
