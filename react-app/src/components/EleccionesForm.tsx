@@ -1,8 +1,14 @@
 // src/components/EleccionesForm.tsx
-import React from "react";
-import { TextField, Button, Typography, Box } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, TextField, Button } from '@mui/material';
 
 const EleccionesForm: React.FC = () => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setVisible(true);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -14,6 +20,8 @@ const EleccionesForm: React.FC = () => {
         flexDirection: "column",
         gap: 3,
         textAlign: "center",
+        transition: 'opacity 0.5s ease, transform 0.5s ease',
+        opacity: visible ? 1 : 0,
       }}
     >
       {/* Caja interna para el contenido */}
@@ -23,7 +31,7 @@ const EleccionesForm: React.FC = () => {
           padding: 4,
           borderRadius: 2,
           boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-          border: "1px solid rgba(0, 0, 0, 0.12)", // Borde sutil
+          border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
         <Typography variant="h4">Nuevas elecciones</Typography>
