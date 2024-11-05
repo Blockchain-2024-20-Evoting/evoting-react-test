@@ -1,13 +1,63 @@
-// src/components/EleccionesForm.tsx
 import React, { useEffect, useState } from "react";
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { Box, Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Warning, CheckCircle } from "@mui/icons-material"; // Importar íconos
+import axios from "axios";
 
 const EleccionesForm: React.FC = () => {
+  const [nombre, setNombre] = useState("");
+  const [fechaInicio, setFechaInicio] = useState("");
+  const [fechaFin, setFechaFin] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
   const [visible, setVisible] = useState(false);
+  
+  const state = "PENDING"; // Asumimos que el estado inicial es PENDING
 
   useEffect(() => {
     setVisible(true);
   }, []);
+
+  const handleGuardar = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const electionData = {
+      name: nombre,
+      startDate: fechaInicio,
+      endDate: fechaFin, 
+      state, // Añadido el estado predeterminado
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8080/v1/election", electionData);
+      console.log("Elección guardada:", response.data);
+      setSuccess(true); // Mostrar el modal de éxito
+    } catch (err: any) {
+      if (err.response) {
+        // Manejo de error en la respuesta
+        if (err.response.status === 409) { // Asumimos que 409 es el código de conflicto
+          setError("El nombre de la elección ya existe en la base de datos.");
+        } else {
+          setError(err.response.data.message || "Error al crear la elección.");
+        }
+      } else {
+        // Error de red
+        setError("Error de red. Inténtalo de nuevo.");
+      }
+      console.error("Error al crear la elección:", err);
+    }
+  };
+
+  const handleCloseSuccess = () => {
+    setSuccess(false); // Cerrar el modal de éxito
+    // También puedes reiniciar los campos del formulario aquí si es necesario
+    setNombre("");
+    setFechaInicio("");
+    setFechaFin("");
+    setError(null);
+  };
+
+  const handleCloseError = () => {
+    setError(null); // Cerrar el modal de error
+  };
 
   return (
     <Box
@@ -23,8 +73,9 @@ const EleccionesForm: React.FC = () => {
         transition: "opacity 0.5s ease, transform 0.5s ease",
         opacity: visible ? 1 : 0,
       }}
+      component="form"
+      onSubmit={handleGuardar}
     >
-      {/* Caja interna para el contenido */}
       <Box
         sx={{
           background: "#fff",
@@ -42,6 +93,8 @@ const EleccionesForm: React.FC = () => {
           variant="outlined"
           fullWidth
           sx={{ mb: 4 }}
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
         />
         <TextField
           label="Fecha inicio"
@@ -50,6 +103,8 @@ const EleccionesForm: React.FC = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           sx={{ mb: 4 }}
+          value={fechaInicio}
+          onChange={(e) => setFechaInicio(e.target.value)}
         />
         <TextField
           label="Fecha fin"
@@ -58,8 +113,12 @@ const EleccionesForm: React.FC = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           sx={{ mb: 4 }}
+          value={fechaFin}
+          onChange={(e) => setFechaFin(e.target.value)}
         />
+        {error && <Typography color="error">{error}</Typography>}
         <Button
+          type="submit"
           variant="contained"
           sx={{
             alignSelf: "center",
@@ -75,6 +134,32 @@ const EleccionesForm: React.FC = () => {
           Guardar
         </Button>
       </Box>
+
+      {/* Modal de éxito */}
+      <Dialog open={success} onClose={handleCloseSuccess}>
+        <DialogTitle>
+          <CheckCircle sx={{ color: "green", mr: 1 }} /> Éxito
+        </DialogTitle>
+        <DialogContent>
+          <Typography>La elección ha sido guardada exitosamente.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseSuccess} color="primary">Cerrar</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Modal de advertencia */}
+      <Dialog open={!!error} onClose={handleCloseError}>
+        <DialogTitle>
+          <Warning sx={{ color: "orange", mr: 1 }} /> Error
+        </DialogTitle>
+        <DialogContent>
+          <Typography>{error}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseError} color="primary">Cerrar</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
