@@ -1,30 +1,64 @@
-import React, { useState } from "react";
-import Card, { CardBody } from "../../../components/Card";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
-  Autocomplete,
   Box,
   Container,
   MenuItem,
   Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-
-const elecciones = ["Elección 1", "Elección 2"];
+import { useNavigate } from "react-router-dom";
 
 export const EleccionesPage: React.FC = () => {
-  const [eleccion, setEleccion] = useState<string>(""); // Estado para manejar la elección seleccionada
+  const [eleccion, setEleccion] = useState<string>("");
+  const [elecciones, setElecciones] = useState<{ id: string; name: string }[]>(
+    []
+  );
+  const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchElecciones = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/v1/election");
+        setElecciones(response.data);
+      } catch (error) {
+        console.error("Error al obtener las elecciones:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchElecciones();
+  }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setEleccion(event.target.value as string); // Actualiza el estado con la elección seleccionada
+    const selectedEleccion = event.target.value;
+    setEleccion(selectedEleccion);
+
+    // Buscar la elección seleccionada usando el nombre
+    const selectedElection = elecciones.find(
+      (eleccion) => eleccion.name === selectedEleccion
+    );
+
+    if (selectedElection) {
+      // Asegúrate de que el ID esté correcto en la URL
+      navigate(`/votaciones/${selectedElection.id}`, {
+        state: {
+          electionId: selectedElection.id,
+          electionName: selectedEleccion,
+        },
+      });
+    }
   };
 
   return (
     <Box
       sx={{
-        minHeight: "100vh", // Asegura que la caja ocupe toda la altura de la página
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -38,43 +72,54 @@ export const EleccionesPage: React.FC = () => {
         <Typography
           sx={{
             fontFamily: "Lexend-mixed",
-            fontSize: { xs: "32px", sm: "48px", md: "64px" }, // tamaño responsivo del texto
+            fontSize: { xs: "32px", sm: "48px", md: "64px" },
             color: "#000000",
-            mb: 4, // Añadir margen inferior para espaciar del siguiente elemento
+            mb: 4,
           }}
         >
-          Escoge las elecciones en la cuál deseas votar
+          Escoge las elecciones en la cual deseas votar
         </Typography>
       </Container>
-      <FormControl
-        fullWidth
-        sx={{ maxWidth: "400px", mb: 10, mt: -8, backgroundColor: "#FFFFFF" }}
-      >
-        {" "}
-        {/* Reduce el ancho del FormControl */}
-        <InputLabel id="demo-simple-select-label">Elige Elecciones</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={eleccion}
-          onChange={handleChange}
+
+      {loading ? (
+        <Typography>Cargando elecciones...</Typography>
+      ) : (
+        <FormControl
+          fullWidth
+          sx={{ maxWidth: "400px", mb: 10, mt: -8, backgroundColor: "#FFFFFF" }}
         >
-          {elecciones.map((eleccion) => (
-            <MenuItem key={eleccion} value={eleccion}>
-              {eleccion}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <InputLabel id="demo-simple-select-label">
+            Elige Elecciones
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={eleccion}
+            onChange={handleChange}
+            label="Elige Elecciones"
+          >
+            {elecciones.length > 0 ? (
+              elecciones.map((eleccion) => (
+                <MenuItem key={eleccion.id} value={eleccion.name}>
+                  {eleccion.name}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem disabled>No hay elecciones disponibles</MenuItem>
+            )}
+          </Select>
+        </FormControl>
+      )}
+
       <Box
         component="img"
         src="/src/assets/imgElecciones.svg"
         alt="Imagen de Elecciones"
         sx={{
-          width: "100%", // Asegura que la imagen sea responsiva
-          maxWidth: "150rem", // Mantiene un ancho máximo para la imagen
+          width: "100%",
+          maxWidth: "150rem",
           mt: { xs: 3, md: 5 },
-          flexGrow: 1, // Permite que la imagen ocupe el espacio restante en la columna
+          flexGrow: 1,
         }}
       />
     </Box>

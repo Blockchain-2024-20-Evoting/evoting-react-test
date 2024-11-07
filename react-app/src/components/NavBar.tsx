@@ -17,9 +17,8 @@ import { useAuth } from "../contexts/AuthContext"; // Importar el contexto de au
 
 const pages = {
   STUDENT: [
-    { label: "Votaciones", href: "/votaciones" },
-    { label: "Estadisticas", href: "/estadisticas" },
     { label: "Elecciones", href: "/elecciones" },
+    { label: "Estadisticas", href: "/estadisticas" },
   ],
   ADMIN: [
     { label: "Votaciones", href: "/votaciones" },
