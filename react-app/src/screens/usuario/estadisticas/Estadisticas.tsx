@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Container,
   Card,
@@ -8,76 +9,56 @@ import {
   Avatar,
 } from "@mui/material";
 
-const elecciones = [
-  {
-    titulo: "Elección 1",
-    candidatos: [
-      {
-        nombre: "Luis Moreno",
-        resultado: "30%",
-        foto: "https://via.placeholder.com/40",
-      },
-      {
-        nombre: "Pedro Pablo",
-        resultado: "20%",
-        foto: "https://via.placeholder.com/40",
-      },
-      {
-        nombre: "Samiel Viaña",
-        resultado: "50%",
-        foto: "https://via.placeholder.com/40",
-      },
-    ],
-  },
-  {
-    titulo: "Elección 2",
-    candidatos: [
-      {
-        nombre: "Ana Pérez",
-        resultado: "60%",
-        foto: "https://via.placeholder.com/40",
-      },
-      {
-        nombre: "Carlos Gómez",
-        resultado: "25%",
-        foto: "https://via.placeholder.com/40",
-      },
-      {
-        nombre: "Lucía Torres",
-        resultado: "15%",
-        foto: "https://via.placeholder.com/40",
-      },
-    ],
-  },
-  {
-    titulo: "Elección 3",
-    candidatos: [
-      {
-        nombre: "Mario López",
-        resultado: "40%",
-        foto: "https://via.placeholder.com/40",
-      },
-      {
-        nombre: "Sara Díaz",
-        resultado: "35%",
-        foto: "https://via.placeholder.com/40",
-      },
-      {
-        nombre: "Juan Castro",
-        resultado: "25%",
-        foto: "https://via.placeholder.com/40",
-      },
-    ],
-  },
-];
+// Define las interfaces de los datos de la API
+interface Candidato {
+  nombre: string;
+  resultado: string;
+  foto: string;
+}
 
-export const EstadisticasPage: React.FC<{}> = () => {
+interface Eleccion {
+  id: number;
+  titulo: string;
+  candidatos: Candidato[];
+}
+
+export const EstadisticasPage: React.FC = () => {
+  const [elecciones, setElecciones] = useState<Eleccion[]>([]);
+
+  useEffect(() => {
+    // Función para cargar los datos de las elecciones
+    const fetchElecciones = async () => {
+      try {
+        // Cambia esto con los IDs de tus elecciones reales
+        const electionIds = [1, 2, 3]; // Ejemplo de IDs de elecciones
+        const eleccionesData = await Promise.all(
+          electionIds.map(async (id) => {
+            const response = await axios.get(
+              `http://localhost:8080/v1/results/${id}`
+            );
+            const candidatos = response.data.map((candidato: any) => ({
+              nombre: candidato.nombre,
+              resultado: candidato.resultado + "%",
+              foto: candidato.foto, // Asegúrate de tener una URL válida para la foto
+            }));
+            return { id, titulo: `Elección ${id}`, candidatos };
+          })
+        );
+        setElecciones(eleccionesData);
+      } catch (error) {
+        console.error("Error al cargar los resultados de las elecciones:", error);
+      }
+    };
+
+    fetchElecciones();
+  }, []);
+
   return (
     <Box sx={{ backgroundColor: "#EAEAEA", pt: 8, pb: 8 }}>
       <Container maxWidth="md">
-        {elecciones.map((eleccion, index) => (
+        {elecciones.map((eleccion) => (
           <Card
-            key={index}
+            key={eleccion.id}
             sx={{
               mb: 4,
               borderRadius: 5,
