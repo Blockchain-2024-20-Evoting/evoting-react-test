@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { Warning, CheckCircle } from "@mui/icons-material"; // Importar íconos
 import axios from "axios";
 
@@ -10,7 +19,7 @@ const EleccionesForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const [visible, setVisible] = useState(false);
-  
+
   const state = "PENDING"; // Asumimos que el estado inicial es PENDING
 
   useEffect(() => {
@@ -22,18 +31,22 @@ const EleccionesForm: React.FC = () => {
     const electionData = {
       name: nombre,
       startDate: fechaInicio,
-      endDate: fechaFin, 
+      endDate: fechaFin,
       state, // Añadido el estado predeterminado
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/v1/election", electionData);
+      const response = await axios.post(
+        "http://localhost:8080/v1/election",
+        electionData
+      );
       console.log("Elección guardada:", response.data);
       setSuccess(true); // Mostrar el modal de éxito
     } catch (err: any) {
       if (err.response) {
         // Manejo de error en la respuesta
-        if (err.response.status === 409) { // Asumimos que 409 es el código de conflicto
+        if (err.response.status === 409) {
+          // Asumimos que 409 es el código de conflicto
           setError("El nombre de la elección ya existe en la base de datos.");
         } else {
           setError(err.response.data.message || "Error al crear la elección.");
@@ -144,7 +157,9 @@ const EleccionesForm: React.FC = () => {
           <Typography>La elección ha sido guardada exitosamente.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseSuccess} color="primary">Cerrar</Button>
+          <Button onClick={handleCloseSuccess} color="primary">
+            Cerrar
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -157,7 +172,9 @@ const EleccionesForm: React.FC = () => {
           <Typography>{error}</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseError} color="primary">Cerrar</Button>
+          <Button onClick={handleCloseError} color="primary">
+            Cerrar
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
