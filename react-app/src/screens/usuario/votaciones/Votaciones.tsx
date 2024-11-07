@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+
 import {
   Box,
   Container,
@@ -11,80 +15,50 @@ import {
   Box as ModalBox,
   CircularProgress,
 } from "@mui/material";
-import axios from "axios";
 
-interface ElectionDTO {
-  id: number;
-  name: string;
-  startDate: string;
-  endDate: string;
-}
-
-interface CandidateResponseDTO {
-  id: number;
+interface Candidate {
+  id: string;
   firstName: string;
   lastName: string;
-  image: string;
+  electionId: number;
   partyName: string;
-  electionName: string;
+  logo: string;
+  photo: string; // Cambié 'foto' por 'photo' para seguir la convención en inglés
 }
 
 export const VotacionesPage: React.FC = () => {
-  const [elecciones, setElecciones] = useState<ElectionDTO[]>([]); // Lista de elecciones
-  const [selectedElection, setSelectedElection] = useState<ElectionDTO | null>(
-    null
-  ); // Elección seleccionada
-  const [candidatos, setCandidatos] = useState<CandidateResponseDTO[]>([]); // Candidatos de la elección seleccionada
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // Candidato seleccionado
-  const [votoRegistrado, setVotoRegistrado] = useState<boolean>(false); // Si ya se votó
-  const [openModal, setOpenModal] = useState<boolean>(false); // Modal de confirmación
-  const [loading, setLoading] = useState<boolean>(true); // Indicador de carga
-
-  // Función para obtener las elecciones disponibles
-  const fetchElecciones = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/v1/election");
-      const today = new Date();
-      const activeElecciones = response.data.filter(
-        (eleccion: ElectionDTO) =>
-          today >= new Date(eleccion.startDate) &&
-          today <= new Date(eleccion.endDate)
-      );
-      setElecciones(activeElecciones);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error al obtener las elecciones", error);
-      setLoading(false);
-    }
-  };
-
-  // Función para obtener los candidatos de una elección
-  const fetchCandidatos = async (electionId: number) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/v1/candidate?electionId=${electionId}`
-      );
-      setCandidatos(response.data);
-    } catch (error) {
-      console.error("Error al obtener los candidatos", error);
-    }
-  };
+  const { state } = useLocation();
+  const { electionId, electionName } = state || {};
+  const [candidatos, setCandidatos] = useState<Candidate[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [votoRegistrado, setVotoRegistrado] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchElecciones(); // Cargar elecciones al inicio
-  }, []);
+    const fetchCandidatos = async () => {
+      if (electionId) {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/v1/candidate?electionId=${electionId}`
+          );
+          setCandidatos(response.data);
+        } catch (error) {
+          console.error("Error fetching candidates:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-  // Función para manejar la selección de una elección
-  const handleElectionSelect = (eleccion: ElectionDTO) => {
-    setSelectedElection(eleccion);
-    fetchCandidatos(eleccion.id); // Obtener los candidatos de la elección seleccionada
-  };
-
-  // Función para manejar el cambio de selección de candidato
-  const handleCheckboxChange = (index: number) => {
-    if (!votoRegistrado) {
-      setSelectedIndex(index === selectedIndex ? null : index);
+    if (electionId) {
+      fetchCandidatos();
     }
+  }, [electionId]);
+
+  const handleCheckboxChange = (index: number) => {
+    setSelectedIndex(index === selectedIndex ? null : index);
+
   };
 
   // Función para manejar el voto
@@ -247,7 +221,11 @@ export const VotacionesPage: React.FC = () => {
               Cancelar
             </Button>
           </Box>
+
         </ModalBox>
+
+        </Box>
+
       </Modal>
     </Box>
   );
