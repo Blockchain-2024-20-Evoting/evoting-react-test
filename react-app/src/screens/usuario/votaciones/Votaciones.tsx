@@ -225,6 +225,7 @@ export const VotacionesPage: React.FC = () => {
           </Box>
         </Box>
       </Modal>
+      
     </Box>
   );
 };
