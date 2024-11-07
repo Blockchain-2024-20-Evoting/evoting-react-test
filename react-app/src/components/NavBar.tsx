@@ -20,7 +20,12 @@ const pages = {
     { label: "Elecciones", href: "/elecciones" },
     { label: "Estadisticas", href: "/estadisticas" },
   ],
-  ADMIN: [{ label: "Dashboard", href: "/dashboard" }],
+  ADMIN: [
+    { label: "Votaciones", href: "/votaciones" },
+    { label: "Estadisticas", href: "/estadisticas" },
+    { label: "Elecciones", href: "/elecciones" },
+    { label: "Dashboard", href: "/dashboard" },
+  ],
 };
 
 export const NavBar: React.FC<{}> = () => {
