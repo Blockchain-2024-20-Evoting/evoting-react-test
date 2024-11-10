@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Box,
@@ -20,12 +20,13 @@ interface Candidate {
   electionId: number;
   partyName: string;
   logo: string;
-  photo: string; // Cambié 'foto' por 'photo' para seguir la convención en inglés
+  photo: string;
 }
 
 export const VotacionesPage: React.FC = () => {
-  const { state } = useLocation();
-  const { electionId, electionName } = state || {};
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { electionId, electionName } = location.state || {};
   const [candidatos, setCandidatos] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -37,7 +38,7 @@ export const VotacionesPage: React.FC = () => {
       if (electionId) {
         try {
           const response = await axios.get(
-            `http://localhost:8080/v1/candidate?electionId=${electionId}`
+            `http://localhost:8080/v1/candidate/elections/${electionId}`
           );
           setCandidatos(response.data);
         } catch (error) {
@@ -45,13 +46,14 @@ export const VotacionesPage: React.FC = () => {
         } finally {
           setLoading(false);
         }
+      } else {
+        console.error("No electionId provided.");
+        navigate("/elecciones"); // Redirige si no se recibe el ID de la elección
       }
     };
 
-    if (electionId) {
-      fetchCandidatos();
-    }
-  }, [electionId]);
+    fetchCandidatos();
+  }, [electionId, navigate]);
 
   const handleCheckboxChange = (index: number) => {
     setSelectedIndex(index === selectedIndex ? null : index);
@@ -64,15 +66,26 @@ export const VotacionesPage: React.FC = () => {
   };
 
   const confirmVote = async () => {
-    const studentId = localStorage.getItem("studentId");
+    const studentId = localStorage.getItem("studentID"); // Asegúrate de que el ID está en localStorage
+    console.log("studentId:", studentId);
     if (!studentId) {
       console.error("Estudiante no autenticado");
+      navigate("/login"); // Redirige al login si no está autenticado
       return;
     }
+    
+    // Convierte el ID a número si es necesario
+    const studentIdNumber = Number(studentId);  
+    
+    if (isNaN(studentIdNumber)) {
+      console.error("El studentId no es un número válido");
+      return;
+    }
+
     const candidateId = candidatos[selectedIndex!].id;
     try {
       await axios.post("http://localhost:8080/vote", {
-        studentId: parseInt(studentId),
+        studentId: studentIdNumber,  // Enviando el ID como número
         candidateId,
       });
       setVotoRegistrado(true);
@@ -205,7 +218,6 @@ export const VotacionesPage: React.FC = () => {
         </Container>
       )}
 
-      {/* Modal de confirmación */}
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
         <Box sx={{ bgcolor: "white", p: 4, borderRadius: 2 }}>
           <Typography variant="h6" align="center">

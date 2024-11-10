@@ -12,6 +12,14 @@ import CandidatosForm from "./components/CandidateAndPartyForm";
 import EleccionesForm from "./components/EleccionesForm";
 import { useAuth } from "./contexts/AuthContext";
 
+const ProtectedRoute: React.FC<{ children: JSX.Element; requiredRole?: "ADMIN" | "STUDENT" }> = ({ children, requiredRole }) => {
+  const { isAuthenticated, role } = useAuth();
+  if (!isAuthenticated || (requiredRole && role !== requiredRole)) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
+
 export const AppRouter: React.FC = () => {
   return (
     <Routes>
@@ -19,13 +27,19 @@ export const AppRouter: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/votaciones/:electionId" element={<VotacionesPage />} />
-
         <Route path="/estadisticas" element={<EstadisticasPage />} />
         <Route path="/elecciones" element={<EleccionesPage />} />
         <Route path="/login" element={<LoginPage />} />
 
         {/* Rutas protegidas */}
-        <Route path="/dashboard/*" element={<Dashboard />}>
+        <Route
+          path="/dashboard/*"
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        >
           <Route path="usuarios" element={<UsuariosForm />} />
           <Route path="candidatos" element={<CandidatosForm />} />
           <Route path="elecciones" element={<EleccionesForm />} />

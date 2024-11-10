@@ -10,6 +10,7 @@ const CandidateAndPartyForm: React.FC = () => {
   const [partyImage, setPartyImage] = useState<File | null>(null);
   const [election, setElection] = useState<string>('');
   const [elections, setElections] = useState<any[]>([]);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchElections = async () => {
@@ -18,6 +19,7 @@ const CandidateAndPartyForm: React.FC = () => {
         setElections(response.data);
       } catch (error) {
         console.error('Error fetching elections:', error);
+        setError('Error al cargar las elecciones.');
       }
     };
     fetchElections();
@@ -25,21 +27,22 @@ const CandidateAndPartyForm: React.FC = () => {
 
   const handleCreate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError('');
 
     // Verificación de campos obligatorios
     if (!firstName || !lastName || !election || !partyName || !partyDescription) {
-      alert('Por favor, complete todos los campos obligatorios.');
+      setError('Por favor, complete todos los campos obligatorios.');
       return;
     }
 
     // Comprobar si las imágenes están seleccionadas
     if (!candidateImage) {
-      alert('Por favor, seleccione una imagen para el candidato.');
+      setError('Por favor, seleccione una imagen para el candidato.');
       return;
     }
 
     if (!partyImage) {
-      alert('Por favor, seleccione una imagen para el partido.');
+      setError('Por favor, seleccione una imagen para el partido.');
       return;
     }
 
@@ -55,7 +58,6 @@ const CandidateAndPartyForm: React.FC = () => {
     partyFormData.append('img', partyImage);
 
     try {
-
       // Envío de los datos del partido
       const partyResponse = await axios.post('http://localhost:8080/v1/party', partyFormData, {  
         headers: {
@@ -71,7 +73,7 @@ const CandidateAndPartyForm: React.FC = () => {
       const candidateResponse = await axios.post('http://localhost:8080/v1/candidate', candidateFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-         },
+        },
       });
 
       console.log("Candidato creado:", candidateResponse.data);
@@ -85,14 +87,13 @@ const CandidateAndPartyForm: React.FC = () => {
       setCandidateImage(null);
       setPartyImage(null);
 
-      
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Error:', error);
-        alert(`Error al crear candidato o partido: ${error.response?.data?.message || 'Error desconocido'}`);
+        setError(`Error al crear candidato o partido: ${error.response?.data?.message || 'Error desconocido'}`);
       } else {
         console.error('Error:', error);
-        alert('Error desconocido al crear candidato o partido.');
+        setError('Error desconocido al crear candidato o partido.');
       }
     }
   };
@@ -112,6 +113,7 @@ const CandidateAndPartyForm: React.FC = () => {
       }}
     >
       <h2 className="form-title" style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Crear Candidato</h2>
+      {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
       <div className="form-group" style={{ display: 'flex', flexDirection: 'column' }}>
         <label htmlFor="firstName">Nombre del candidato</label>
         <input
