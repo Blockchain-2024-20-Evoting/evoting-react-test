@@ -14,9 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 export const EleccionesPage: React.FC = () => {
   const [eleccion, setEleccion] = useState<string>("");
-  const [elecciones, setElecciones] = useState<{ id: string; name: string }[]>(
-    []
-  );
+  const [elecciones, setElecciones] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
@@ -36,20 +34,18 @@ export const EleccionesPage: React.FC = () => {
   }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
-    const selectedEleccion = event.target.value;
-    setEleccion(selectedEleccion);
+    const selectedElectionId = event.target.value;
+    setEleccion(selectedElectionId);
 
-    // Buscar la elección seleccionada usando el nombre
     const selectedElection = elecciones.find(
-      (eleccion) => eleccion.name === selectedEleccion
+      (eleccion) => eleccion.id === selectedElectionId
     );
 
     if (selectedElection) {
-      // Asegúrate de que el ID esté correcto en la URL
       navigate(`/votaciones/${selectedElection.id}`, {
         state: {
           electionId: selectedElection.id,
-          electionName: selectedEleccion,
+          electionName: selectedElection.name,
         },
       });
     }
@@ -88,9 +84,7 @@ export const EleccionesPage: React.FC = () => {
           fullWidth
           sx={{ maxWidth: "400px", mb: 10, mt: -8, backgroundColor: "#FFFFFF" }}
         >
-          <InputLabel id="demo-simple-select-label">
-            Elige Elecciones
-          </InputLabel>
+          <InputLabel id="demo-simple-select-label">Elige Elecciones</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -100,7 +94,7 @@ export const EleccionesPage: React.FC = () => {
           >
             {elecciones.length > 0 ? (
               elecciones.map((eleccion) => (
-                <MenuItem key={eleccion.id} value={eleccion.name}>
+                <MenuItem key={eleccion.id} value={eleccion.id}>
                   {eleccion.name}
                 </MenuItem>
               ))

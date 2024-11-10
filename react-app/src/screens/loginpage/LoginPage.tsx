@@ -23,6 +23,11 @@ const LoginPage: React.FC = () => {
 
       // Manejar la respuesta del servidor
       if (response.data.token) {
+        // Guarda el studentId en el localStorage
+        const studentId = response.data.studentId;
+        localStorage.setItem("studentId", studentId); // Asegúrate de que el servidor esté enviando el studentId en la respuesta
+        console.log("studentId:", studentId);
+
         // Llama al login del contexto con el rol recibido
         await login(email, password, response.data.role); // Aquí pasamos el rol al contexto
 
