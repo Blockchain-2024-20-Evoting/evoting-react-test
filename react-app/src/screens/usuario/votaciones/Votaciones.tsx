@@ -66,7 +66,7 @@ export const VotacionesPage: React.FC = () => {
   };
 
   const confirmVote = async () => {
-    const studentId = localStorage.getItem("studentID"); // Asegúrate de que el ID está en localStorage
+    const studentId = localStorage.getItem("studentId"); // Asegúrate de que el ID está en localStorage
     console.log("studentId:", studentId);
     if (!studentId) {
       console.error("Estudiante no autenticado");
