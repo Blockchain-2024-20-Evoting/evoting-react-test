@@ -57,17 +57,28 @@ export const EstadisticasPage: React.FC = () => {
             `http://localhost:8080/v1/results/${eleccionSeleccionada}`
           );
 
-          const candidatosData = response.data.map((resultado: any) => ({
-            nombre: resultado.candidateEntity.name,
-            porcentaje: resultado.percentages,
-            foto: resultado.candidateEntity.photoUrl,
-            partido: resultado.partyName,
-          }));
+          // Verificar que la respuesta tenga la estructura correcta
+          if (response.data && Array.isArray(response.data)) {
+            const candidatosData = response.data.map((resultado: any) => ({
+              nombre: resultado.candidateEntity.name,
+              porcentaje: resultado.percentages,
+              foto: resultado.candidateEntity.photoUrl,
+              partido: resultado.partyName,
+            }));
 
-          setCandidatos(candidatosData);
-          setResultadosListos(candidatosData.length > 0);
-        } catch (error) {
-          console.error("Error al cargar los resultados:", error);
+            setCandidatos(candidatosData);
+            setResultadosListos(candidatosData.length > 0);
+          } else {
+            console.error("Respuesta del servidor inesperada:", response.data);
+            setResultadosListos(false); // En caso de que no haya datos esperados
+          }
+        } catch (error: unknown) {
+          if (axios.isAxiosError(error)) {
+            // Accede a las propiedades específicas del error de Axios
+            console.error("Error al cargar los resultados:", error.response?.data || error.message);
+          } else {
+            console.error("Error desconocido:", error);
+          }
           setResultadosListos(false); // Asume que no hay resultados en caso de error
         }
       };
