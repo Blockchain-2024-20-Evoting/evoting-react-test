@@ -1,2 +1,0 @@
-# evoting-react-test
-Test
