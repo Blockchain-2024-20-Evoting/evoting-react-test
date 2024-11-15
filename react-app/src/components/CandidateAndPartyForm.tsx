@@ -45,7 +45,9 @@ const CandidateAndPartyForm: React.FC = () => {
   useEffect(() => {
     const fetchElections = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/v1/election");
+        const response = await axios.get(
+          "http://206.189.238.162:8080/v1/election"
+        );
         setElections(response.data);
       } catch (error) {
         console.error("Error fetching elections:", error);
@@ -95,11 +97,15 @@ const CandidateAndPartyForm: React.FC = () => {
 
     try {
       // Crear el partido
-      const partyResponse = await axios.post("http://localhost:8080/v1/party", partyFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const partyResponse = await axios.post(
+        "http://206.189.238.162:8080/v1/party",
+        partyFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log("Partido creado:", partyResponse.data.id);
 
@@ -107,11 +113,15 @@ const CandidateAndPartyForm: React.FC = () => {
       candidateFormData.append("partyId", partyResponse.data.id);
 
       // Crear el candidato
-      const candidateResponse = await axios.post("http://localhost:8080/v1/candidate", candidateFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const candidateResponse = await axios.post(
+        "http://206.189.238.162:8080/v1/candidate",
+        candidateFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log("Candidato creado:", candidateResponse.data);
 
@@ -128,7 +138,11 @@ const CandidateAndPartyForm: React.FC = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Error:", error);
-        setError(`Error al crear candidato o partido: ${error.response?.data?.message || "Error desconocido"}`);
+        setError(
+          `Error al crear candidato o partido: ${
+            error.response?.data?.message || "Error desconocido"
+          }`
+        );
       } else {
         console.error("Error:", error);
         setError("Error desconocido al crear candidato o partido.");
@@ -139,7 +153,10 @@ const CandidateAndPartyForm: React.FC = () => {
   const handleCloseSuccess = () => setSuccess(false);
   const handleCloseError = () => setError(null);
 
-  const renderImageBox = (image: File | null, setImage: React.Dispatch<React.SetStateAction<File | null>>) => (
+  const renderImageBox = (
+    image: File | null,
+    setImage: React.Dispatch<React.SetStateAction<File | null>>
+  ) => (
     <Box
       sx={{
         width: 120,

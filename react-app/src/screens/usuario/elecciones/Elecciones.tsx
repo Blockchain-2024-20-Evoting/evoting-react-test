@@ -14,14 +14,16 @@ import { useNavigate } from "react-router-dom";
 
 export const EleccionesPage: React.FC = () => {
   const [eleccion, setEleccion] = useState<string>("");
-  const [elecciones, setElecciones] = useState<{ id: string; name: string }[]>([]);
+  const [elecciones, setElecciones] = useState<{ id: string; name: string }[]>(
+    []
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchElecciones = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/v1/election");
+        const response = await axios.get("http://206.189.238.162:8080/v1/election");
         setElecciones(response.data);
       } catch (error) {
         console.error("Error al obtener las elecciones:", error);
@@ -84,7 +86,9 @@ export const EleccionesPage: React.FC = () => {
           fullWidth
           sx={{ maxWidth: "400px", mb: 10, mt: -8, backgroundColor: "#FFFFFF" }}
         >
-          <InputLabel id="demo-simple-select-label">Elige Elecciones</InputLabel>
+          <InputLabel id="demo-simple-select-label">
+            Elige Elecciones
+          </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -107,7 +111,7 @@ export const EleccionesPage: React.FC = () => {
 
       <Box
         component="img"
-        src="/src/assets/imgElecciones.svg"
+        src="/imgElecciones.svg"
         alt="Imagen de Elecciones"
         sx={{
           width: "100%",

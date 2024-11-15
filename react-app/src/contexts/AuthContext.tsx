@@ -38,10 +38,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     role: "STUDENT" | "ADMIN"
   ) => {
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://206.189.238.162:8080/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.data.token) {
         setIsAuthenticated(true);

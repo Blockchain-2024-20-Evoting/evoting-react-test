@@ -37,7 +37,7 @@ const EleccionesForm: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/v1/election",
+        "http://206.189.238.162:8080/v1/election",
         electionData
       );
       console.log("Elección guardada:", response.data);

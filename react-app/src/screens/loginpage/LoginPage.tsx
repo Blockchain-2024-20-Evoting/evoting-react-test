@@ -14,10 +14,13 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://206.189.238.162:8080/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
       console.log(response.data);
 
@@ -64,12 +67,20 @@ const LoginPage: React.FC = () => {
       <Box
         style={{
           width: "50%",
-          backgroundImage: 'url("/public/imagenLogin.svg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
           height: "100vh",
         }}
-      />
+      >
+        <img
+          src="/imagenLogin.svg"
+          alt=""
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+        />
+      </Box>
       <Box
         style={{
           width: "50%",

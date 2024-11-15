@@ -1,8 +1,8 @@
 // src/screens/dashboard/Dashboard.tsx
-import React from 'react';
-import { Box, Typography, Container } from '@mui/material';
-import Sidebar from '../../components/Sidebar';
-import { Outlet } from 'react-router-dom';
+import React from "react";
+import { Box, Container } from "@mui/material";
+import Sidebar from "../../components/Sidebar";
+import { Outlet } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
   return (

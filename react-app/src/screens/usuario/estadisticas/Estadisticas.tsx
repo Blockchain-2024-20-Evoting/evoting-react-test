@@ -28,14 +28,18 @@ interface Eleccion {
 
 export const EstadisticasPage: React.FC = () => {
   const [elecciones, setElecciones] = useState<Eleccion[]>([]);
-  const [eleccionSeleccionada, setEleccionSeleccionada] = useState<number | null>(null);
+  const [eleccionSeleccionada, setEleccionSeleccionada] = useState<
+    number | null
+  >(null);
   const [candidatos, setCandidatos] = useState<Candidato[]>([]);
   const [resultadosListos, setResultadosListos] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchElecciones = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/v1/election');
+        const response = await axios.get(
+          "http://206.189.238.162:8080/v1/election"
+        );
         const eleccionesData = response.data.map((eleccion: any) => ({
           id: eleccion.id,
           titulo: eleccion.name,
@@ -54,7 +58,7 @@ export const EstadisticasPage: React.FC = () => {
       const fetchResultados = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8080/v1/results/${eleccionSeleccionada}`
+            `http://206.189.238.162:8080/v1/results/${eleccionSeleccionada}`
           );
 
           // Verificar que la respuesta tenga la estructura correcta
@@ -75,7 +79,10 @@ export const EstadisticasPage: React.FC = () => {
         } catch (error: unknown) {
           if (axios.isAxiosError(error)) {
             // Accede a las propiedades específicas del error de Axios
-            console.error("Error al cargar los resultados:", error.response?.data || error.message);
+            console.error(
+              "Error al cargar los resultados:",
+              error.response?.data || error.message
+            );
           } else {
             console.error("Error desconocido:", error);
           }
@@ -91,7 +98,9 @@ export const EstadisticasPage: React.FC = () => {
     <Box sx={{ backgroundColor: "#EAEAEA", pt: 8, pb: 8 }}>
       <Container maxWidth="md">
         <FormControl fullWidth sx={{ mb: 4 }}>
-          <InputLabel id="eleccion-select-label">Selecciona una elección</InputLabel>
+          <InputLabel id="eleccion-select-label">
+            Selecciona una elección
+          </InputLabel>
           <Select
             labelId="eleccion-select-label"
             value={eleccionSeleccionada || ""}
@@ -116,7 +125,9 @@ export const EstadisticasPage: React.FC = () => {
                   boxShadow: "none",
                 }}
               >
-                <CardContent sx={{ backgroundColor: "#47184D", borderRadius: 5 }}>
+                <CardContent
+                  sx={{ backgroundColor: "#47184D", borderRadius: 5 }}
+                >
                   <Typography
                     variant="h5"
                     component="div"
@@ -162,7 +173,11 @@ export const EstadisticasPage: React.FC = () => {
                 </CardContent>
               </Card>
             ) : (
-              <Typography variant="h6" textAlign="center" color="text.secondary">
+              <Typography
+                variant="h6"
+                textAlign="center"
+                color="text.secondary"
+              >
                 Resultados no listos aún
               </Typography>
             )}
