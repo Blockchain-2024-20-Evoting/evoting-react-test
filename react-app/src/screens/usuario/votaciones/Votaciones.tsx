@@ -38,7 +38,7 @@ export const VotacionesPage: React.FC = () => {
       if (electionId) {
         try {
           const response = await axios.get(
-            `http://localhost:8080/v1/candidate/elections/${electionId}`
+            `http://206.189.238.162:8080/v1/candidate/elections/${electionId}`
           );
           setCandidatos(response.data);
         } catch (error) {
@@ -73,10 +73,10 @@ export const VotacionesPage: React.FC = () => {
       navigate("/login"); // Redirige al login si no está autenticado
       return;
     }
-    
+
     // Convierte el ID a número si es necesario
-    const studentIdNumber = Number(studentId);  
-    
+    const studentIdNumber = Number(studentId);
+
     if (isNaN(studentIdNumber)) {
       console.error("El studentId no es un número válido");
       return;
@@ -84,8 +84,8 @@ export const VotacionesPage: React.FC = () => {
 
     const candidateId = candidatos[selectedIndex!].id;
     try {
-      await axios.post("http://localhost:8080/vote", {
-        studentId: studentIdNumber,  // Enviando el ID como número
+      await axios.post("http://206.189.238.162:8080/vote", {
+        studentId: studentIdNumber, // Enviando el ID como número
         candidateId,
       });
       setVotoRegistrado(true);

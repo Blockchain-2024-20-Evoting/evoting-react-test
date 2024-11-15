@@ -32,7 +32,7 @@ export const HomePage: React.FC<{}> = () => {
 
       <Box
         component="img"
-        src="/src/assets/imagenInicio.svg"
+        src="/ImagenInicio.svg"
         alt="Imagen de Inicio"
         sx={{
           width: { xs: "100%", sm: "100%", md: "100%" }, // tamaño responsivo de la imagen

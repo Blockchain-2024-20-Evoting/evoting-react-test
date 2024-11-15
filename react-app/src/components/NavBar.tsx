@@ -82,7 +82,7 @@ export const NavBar: React.FC<{}> = () => {
               },
             }}
           >
-            <img className="logo" src="/src/assets/logo.svg" alt="Logo" />
+            <img className="logo" src="/LogoEvoting.svg" alt="Logo" />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -158,7 +158,7 @@ export const NavBar: React.FC<{}> = () => {
               <Box>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="User Avatar" src="/path/to/avatar.jpg" />
+                    <Avatar alt="User Avatar" src="/avatar.jpg" />
                   </IconButton>
                 </Tooltip>
                 <Menu

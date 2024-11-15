@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { List, ListItem, ListItemIcon, ListItemText, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import PersonIcon from "@mui/icons-material/Person";
