@@ -35,10 +35,19 @@ const EleccionesForm: React.FC = () => {
       state, // Añadido el estado predeterminado
     };
 
+    // Obtener el token JWT desde donde lo tengas (localStorage, Contexto, etc.)
+    const token = "tu_token_jwt_aqui"; // Reemplaza esto con el token real
+
     try {
       const response = await axios.post(
         "http://206.189.238.162:8080/v1/election",
-        electionData
+        electionData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("Elección guardada:", response.data);
       setSuccess(true); // Mostrar el modal de éxito
