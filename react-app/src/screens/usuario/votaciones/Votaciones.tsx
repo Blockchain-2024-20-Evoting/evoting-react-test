@@ -96,7 +96,7 @@ export const VotacionesPage: React.FC = () => {
         "http://206.189.238.162:8080/vote", 
         {
         studentId: studentIdNumber, // Enviando el ID como número
-        candidateId,
+        candidateId: candidateId,
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
