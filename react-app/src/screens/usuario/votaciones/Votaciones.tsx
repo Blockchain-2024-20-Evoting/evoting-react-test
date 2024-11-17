@@ -33,12 +33,20 @@ export const VotacionesPage: React.FC = () => {
   const [votoRegistrado, setVotoRegistrado] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
+  const token = localStorage.getItem("authToken");
+
+
   useEffect(() => {
     const fetchCandidatos = async () => {
       if (electionId) {
         try {
           const response = await axios.get(
-            `http://206.189.238.162:8080/v1/candidate/elections/${electionId}`
+            `http://206.189.238.162:8080/v1/candidate/elections/${electionId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
           setCandidatos(response.data);
         } catch (error) {
@@ -84,9 +92,15 @@ export const VotacionesPage: React.FC = () => {
 
     const candidateId = candidatos[selectedIndex!].id;
     try {
-      await axios.post("http://206.189.238.162:8080/vote", {
+      await axios.post(
+        "http://206.189.238.162:8080/vote", 
+        {
         studentId: studentIdNumber, // Enviando el ID como número
         candidateId,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
       setVotoRegistrado(true);
       setOpenModal(false);

@@ -42,11 +42,18 @@ const CandidateAndPartyForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
 
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchElections = async () => {
       try {
         const response = await axios.get(
-          "http://206.189.238.162:8080/v1/election"
+          "http://206.189.238.162:8080/v1/election",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setElections(response.data);
       } catch (error) {
@@ -102,6 +109,7 @@ const CandidateAndPartyForm: React.FC = () => {
         partyFormData,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -119,6 +127,7 @@ const CandidateAndPartyForm: React.FC = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

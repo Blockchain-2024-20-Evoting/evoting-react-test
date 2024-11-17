@@ -34,11 +34,18 @@ export const EstadisticasPage: React.FC = () => {
   const [candidatos, setCandidatos] = useState<Candidato[]>([]);
   const [resultadosListos, setResultadosListos] = useState<boolean>(true);
 
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchElecciones = async () => {
       try {
         const response = await axios.get(
-          "http://206.189.238.162:8080/v1/election"
+          "http://206.189.238.162:8080/v1/election",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const eleccionesData = response.data.map((eleccion: any) => ({
           id: eleccion.id,
@@ -58,7 +65,13 @@ export const EstadisticasPage: React.FC = () => {
       const fetchResultados = async () => {
         try {
           const response = await axios.get(
-            `http://206.189.238.162:8080/v1/results/${eleccionSeleccionada}`
+            `http://206.189.238.162:8080/v1/results/${eleccionSeleccionada}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              },
+            }
           );
 
           // Verificar que la respuesta tenga la estructura correcta
