@@ -36,7 +36,8 @@ const EleccionesForm: React.FC = () => {
     };
 
     // Obtener el token JWT desde donde lo tengas (localStorage, Contexto, etc.)
-    const token = "tu_token_jwt_aqui"; // Reemplaza esto con el token real
+    const token = localStorage.getItem("authToken"); // Reemplaza esto con el token real
+    console.log("AuthToken");
 
     try {
       const response = await axios.post(
