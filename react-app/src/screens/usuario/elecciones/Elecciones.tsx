@@ -20,10 +20,19 @@ export const EleccionesPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchElecciones = async () => {
       try {
-        const response = await axios.get("http://206.189.238.162:8080/v1/election");
+        const response = await axios.get(
+          "http://206.189.238.162:8080/v1/election",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setElecciones(response.data);
       } catch (error) {
         console.error("Error al obtener las elecciones:", error);

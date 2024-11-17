@@ -26,10 +26,18 @@ const NewUserForm: React.FC = () => {
         password,
       };
 
+      const token = localStorage.getItem("authToken");
+
       // Hacer la solicitud POST al backend
       const response = await axios.post(
         "http://206.189.238.162:8080/auth/register/student",
-        newUser
+        newUser,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       ); // Cambiado a la ruta correcta
 
       if (response.status === 201) {
