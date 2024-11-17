@@ -99,7 +99,7 @@ export const VotacionesPage: React.FC = () => {
         candidateId,
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
       setVotoRegistrado(true);
