@@ -1,0 +1,6 @@
+services:
+  react-frontend:
+    build: .
+    container_name: react-frontend
+    ports:
+      - "80:80"
