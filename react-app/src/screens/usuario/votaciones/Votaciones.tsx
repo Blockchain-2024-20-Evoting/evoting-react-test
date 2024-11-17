@@ -92,16 +92,20 @@ export const VotacionesPage: React.FC = () => {
 
     const candidateId = candidatos[selectedIndex!].id;
     try {
-      await axios.post(
-        "http://206.189.238.162:8080/vote", 
-        {
-        studentId: studentIdNumber, // Enviando el ID como número
+      const newVote = {
+        studentId: studentIdNumber,
         candidateId: candidateId,
+      }
+
+      await axios.post(
+        "http://206.189.238.162:8080/vote", newVote,
+        {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      });
+      }
+    );
       setVotoRegistrado(true);
       setOpenModal(false);
     } catch (error) {
