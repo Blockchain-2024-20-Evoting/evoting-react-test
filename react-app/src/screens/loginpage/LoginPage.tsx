@@ -19,25 +19,27 @@ const LoginPage: React.FC = () => {
         {
           email,
           password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
 
-      console.log(response.data);
-
-      // Manejar la respuesta del servidor
       if (response.data.token) {
-        // Guarda el studentId en el localStorage
-        const studentId = response.data.studentId;
-        localStorage.setItem("studentId", studentId); // Asegúrate de que el servidor esté enviando el studentId en la respuesta
-        console.log("studentId:", studentId);
+        // Guardar token y studentId en localStorage
+        const { token, studentId, role } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("studentId", studentId);
 
-        // Llama al login del contexto con el rol recibido
-        await login(email, password, response.data.role); // Aquí pasamos el rol al contexto
+        // Llama al método login del contexto
+        await login(email, password, role);
 
-        // Redirigir según el rol del usuario
-        if (response.data.role === "ADMIN") {
+        // Redirigir según el rol
+        if (role === "ADMIN") {
           navigate("/dashboard");
-        } else if (response.data.role === "STUDENT") {
+        } else if (role === "STUDENT") {
           navigate("/home");
         }
       } else {
@@ -45,10 +47,9 @@ const LoginPage: React.FC = () => {
       }
     } catch (err: any) {
       if (err.response) {
-        const message =
-          err.response.data.message ||
-          "Ha ocurrido un error en el inicio de sesión.";
-        setError(message);
+        setError(
+          err.response.data.message || "Ha ocurrido un error en el inicio de sesión."
+        );
       } else {
         setError("Ha ocurrido un error de red.");
       }
@@ -104,7 +105,7 @@ const LoginPage: React.FC = () => {
           margin="normal"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          onKeyPress={handleKeyPress} // Agregar el manejador de la tecla
+          onKeyPress={handleKeyPress}
         />
         <TextField
           label="Contraseña"
@@ -114,7 +115,7 @@ const LoginPage: React.FC = () => {
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          onKeyPress={handleKeyPress} // Agregar el manejador de la tecla
+          onKeyPress={handleKeyPress}
         />
         {error && <Typography color="error">{error}</Typography>}
         <Button
